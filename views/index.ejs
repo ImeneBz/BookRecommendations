@@ -1,0 +1,108 @@
+<%- include("partials/header.ejs") %>
+<div class=" IntroductionContainer px-4 py-5 mb-5 text-center">
+  <img class="d-block mx-auto mb-0" src="Assets/logo.jpeg" alt="logo" height="100">
+  <h1 class="display-5 fw-bold text-body-emphasis">WELCOME TO BR</h1>
+
+  <div class="col-lg-6 mx-auto">
+    <p class="lead mb-4"> below you'll find a list of books recommended by readers, add yours ! </p>
+  </div>
+</div>
+
+<div class="RecommendationContainer ">
+  <h2 class="display-9 fw-bold text-body-emphasis py-1 mb-0  text-center ">Latest Recommendations</h1>
+  <div class="d-flex flex-column flex-md-row p-4 gap-4 py-md-5 align-items-center justify-content-center">
+    <div class="list-group">
+      <a class="list-group-item list-group-item-action d-flex gap-3 py-3" aria-current="true">
+        <img src="Assets/25531.jpg" alt="logo" width="32" height="32" class="rounded-circle flex-shrink-0">
+        <div class="d-flex gap-2 w-100 justify-content-between">
+          <div>
+            <h6 class="mb-0"><%=recomendations[0].title%></h6>
+            <p class="mb-0 opacity-75"><%=recomendations[0].author%></p>
+          </div>
+        </div>
+      </a>
+      <a class="list-group-item list-group-item-action d-flex gap-3 py-3" aria-current="true">
+        <img src="Assets/25531.jpg" alt="logo" width="32" height="32" class="rounded-circle flex-shrink-0">
+        <div class="d-flex gap-2 w-100 justify-content-between">
+          <div>
+            <h6 class="mb-0"><%=recomendations[1].title%></h6>
+            <p class="mb-0 opacity-75"><%=recomendations[1].author%></p>
+          </div>
+        </div>
+      </a>
+      <a class="list-group-item list-group-item-action d-flex gap-3 py-3" aria-current="true">
+        <img src="Assets/25531.jpg" alt="logo" width="32" height="32" class="rounded-circle flex-shrink-0">
+        <div class="d-flex gap-2 w-100 justify-content-between">
+          <div>
+            <h6 class="mb-0"><%=recomendations[2].title%></h6>
+            <p class="mb-0 opacity-75"><%=recomendations[2].author%></p>
+          </div>
+        </div>
+      </a>
+      <div class="list-group-item list-group-item-action d-flex gap-3 py-3" aria-current="true">
+        <div class="d-flex gap-2 w-100 justify-content-center">
+          <div>
+            <form id="recoPage" action="/recommendations" method="POST">
+              <input type="hidden" name="action" value="see_more_recommendations">
+            </form>
+            <p style="cursor: pointer" class="mb-0 opacity-75" id="submitText" >see more recommendations</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <div class="BookContainer ">
+    <h2 class="display-9 fw-bold text-body-emphasis py-1 mb-5 text-center ">Enter the name of the book you want to recommend</h1>
+
+    <form action="/BookResult" id="form" class="form" method="POST">
+        <input type="text" name="search">
+        <button type="submit" class="form-submit btn-primary">Go</button>
+    </form>
+
+    <% if (locals.data) { 
+        if (locals.data.numFound == 0 ) {%>
+        <section id="cards" class="cards">
+        <article class="card-item">
+        <h6> No results </h6>
+      </article>
+    </section>
+        <% } else { %>
+    <h6> Here is what we found: </h6>
+    <section id="cards" class="cards">
+      
+        <% for (var i = 0; i < Math.min(data.docs.length, 3); i++) { %>
+          <article class="card-item">
+            <h2 class="card-activity" name="title"><%= data.docs[i].title%></h2>
+            <div class="card-info">
+              <span class="card-type" name="auhtor"> Author : <%=data.docs[i].author_name ? data.docs[i].author_name[0] : 'Unknown Author' %> </span>
+              <span class="card-participants"> Nb of Pages : <%= data.docs[i].number_of_pages_median ? data.docs[i].number_of_pages_median : 'Unknown' %></span>
+            </div>
+          <form action="/BookAdded" method="POST">
+            <div class="card-button">
+              <input type="hidden" name="title" value="<%= data.docs[i].title %>"> 
+              <input type="hidden" name="author" value="<%= data.docs[i].author_name[0] %>"> 
+                <button type="submit" class="btn btn-primary btn-lg px-4 gap-3 mt-4"> 
+                   Add to Books you would recommend 
+                </button>
+          </form>
+        </div>
+      </article>
+      <% } %> 
+    </section>
+    <% }} %> 
+
+  </div>
+
+  <script>
+    document.getElementById("submitText").addEventListener("click", () => {
+      document.getElementById("recoPage").submit();
+      console.log("I am here") 
+  })
+
+  </script>
+
+<!--footer-->
+<%- include("partials/footer.ejs") %>
+

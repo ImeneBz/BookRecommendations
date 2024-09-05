@@ -1,0 +1,14 @@
+<%- include("partials/header.ejs") %>
+<div class="recoContainer p-3">
+
+<% books.forEach(book => { %>
+<div class="bookC gap-3 p-3">
+  <h6 class="mb-0"><%= book.title %></h6>
+  <p class="mb-0 opacity-75"><%= book.author %></p>
+</div>
+<%})%>
+</div>
+
+<!--footer-->
+<%- include("partials/footer.ejs") %>
+
