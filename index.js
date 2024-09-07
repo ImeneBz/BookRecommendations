@@ -10,7 +10,10 @@ const db = new pg.Client({
     host: "ceqbglof0h8enj.cluster-czrs8kj4isg7.us-east-1.rds.amazonaws.com",
     database: "dfhedo77cpos9g",
     password: "p81f3e7b05c6923c917480fc65b24d0206fddf79bbf1037257ca9311eb7a50d3f",
-    port: 5432
+    port: 5432,
+      ssl:{
+      rejectUnauthorized:false
+    }
   })
   
 db.connect();
